@@ -2,12 +2,14 @@ import type { MoonPhase } from "./moon-phase-calculator"
 
 interface MoonDisplayProps {
   moonPhase: MoonPhase
-  size?: "sm" | "md" | "lg" | "xl"
+  size?: "xs" | "sm" | "md" | "lg" | "xl"
   showGlow?: boolean
+  className?: string
 }
 
-export function MoonDisplay({ moonPhase, size = "md", showGlow = false }: MoonDisplayProps) {
+export function MoonDisplay({ moonPhase, size = "md", showGlow = false, className = "" }: MoonDisplayProps) {
   const sizeClasses = {
+    xs: "w-6 h-6 text-lg",
     sm: "w-8 h-8 text-2xl",
     md: "w-16 h-16 text-4xl",
     lg: "w-24 h-24 text-6xl",
@@ -20,6 +22,7 @@ export function MoonDisplay({ moonPhase, size = "md", showGlow = false }: MoonDi
       flex items-center justify-center rounded-full bg-card/50 backdrop-blur-sm
       ${sizeClasses[size]}
       ${showGlow ? "moon-glow" : ""}
+      ${className}
       transition-all duration-300
     `}
     >
