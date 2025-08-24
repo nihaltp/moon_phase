@@ -16,6 +16,11 @@ export function MoonDisplay({ moonPhase, size = "md", showGlow = false, classNam
     xl: "w-32 h-32 text-8xl",
   }
 
+  const getDetailedAltText = (phase: MoonPhase) => {
+    const illuminationPercent = Math.round(phase.illumination * 100)
+    return `${phase.name} moon phase - ${illuminationPercent}% illuminated lunar phase showing ${phase.emoji} symbol`
+  }
+
   return (
     <div
       className={`
@@ -26,7 +31,12 @@ export function MoonDisplay({ moonPhase, size = "md", showGlow = false, classNam
       transition-all duration-300
     `}
     >
-      <span className="select-none" role="img" aria-label={moonPhase.name}>
+      <span
+        className="select-none"
+        role="img"
+        aria-label={getDetailedAltText(moonPhase)}
+        title={`${moonPhase.name} - ${Math.round(moonPhase.illumination * 100)}% illuminated`}
+      >
         {moonPhase.emoji}
       </span>
     </div>

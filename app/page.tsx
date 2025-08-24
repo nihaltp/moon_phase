@@ -30,20 +30,21 @@ export default function MoonPhasePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-card/20">
       <div className="container mx-auto px-4 py-8 max-w-2xl">
-        {/* Header */}
-        <div className="text-center mb-8">
+        <header className="text-center mb-8">
           <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-foreground via-accent to-foreground bg-clip-text text-transparent">
-            Lunar Phases
+            Moon Phase Tracker - Current Lunar Phases
           </h1>
-          <p className="text-muted-foreground">Track the moon's journey through its phases</p>
-        </div>
+          <p className="text-muted-foreground text-lg">
+            Track the moon's journey through its phases with accurate astronomical data and beautiful visualizations
+          </p>
+        </header>
 
-        {/* Navigation */}
-        <div className="flex flex-wrap justify-center gap-2 mb-8">
+        <nav className="flex flex-wrap justify-center gap-2 mb-8" aria-label="Moon phase navigation">
           <Button
             variant={currentView === "current" ? "default" : "ghost"}
             onClick={() => setCurrentView("current")}
             className="bg-primary hover:bg-primary/80"
+            aria-label="View current moon phase"
           >
             Current Phase
           </Button>
@@ -51,6 +52,7 @@ export default function MoonPhasePage() {
             variant={currentView === "forecast" ? "default" : "ghost"}
             onClick={() => setCurrentView("forecast")}
             className="bg-primary hover:bg-primary/80"
+            aria-label="View 7-day moon phase forecast"
           >
             Next 7 Days
           </Button>
@@ -58,6 +60,7 @@ export default function MoonPhasePage() {
             variant={currentView === "datePicker" ? "default" : "ghost"}
             onClick={() => setCurrentView("datePicker")}
             className="bg-primary hover:bg-primary/80"
+            aria-label="Choose specific date for moon phase"
           >
             Choose Date
           </Button>
@@ -65,18 +68,20 @@ export default function MoonPhasePage() {
             variant={currentView === "calendar" ? "default" : "ghost"}
             onClick={() => setCurrentView("calendar")}
             className="bg-primary hover:bg-primary/80"
+            aria-label="View monthly moon phase calendar"
           >
             Show Calendar
           </Button>
-        </div>
+        </nav>
 
-        {/* Main Content */}
-        <div className="bg-card/30 backdrop-blur-sm rounded-2xl border border-border/50 p-6">{renderView()}</div>
+        <main className="bg-card/30 backdrop-blur-sm rounded-2xl border border-border/50 p-6">{renderView()}</main>
 
-        {/* Footer */}
-        <div className="text-center mt-8 text-sm text-muted-foreground">
-          <p>Moon phase calculations are approximate and based on astronomical data</p>
-        </div>
+        <footer className="text-center mt-8 text-sm text-muted-foreground">
+          <p className="mb-2">
+            Moon phase calculations are based on precise astronomical algorithms and lunar cycle data
+          </p>
+          <p>Explore lunar cycles, track moon phases, and discover the beauty of our celestial companion</p>
+        </footer>
       </div>
     </div>
   )
