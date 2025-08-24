@@ -123,19 +123,71 @@
     @apply bg-background text-foreground;
   }
 
-  /* Added custom glow effects for moon phase elements */
+  /* Enhanced moon glow effects with multiple shadow layers for realistic appearance */
   .moon-glow {
-    box-shadow: 0 0 20px oklch(0.65 0.15 45 / 0.3), 0 0 40px oklch(0.65 0.15 45 / 0.2);
+    box-shadow: 0 0 10px oklch(0.65 0.15 45 / 0.4), 0 0 20px oklch(0.65 0.15 45 / 0.3), 0 0 40px
+      oklch(0.65 0.15 45 / 0.2), inset 0 0 10px oklch(0.8 0.1 280 / 0.1);
+    animation: moonPulse 3s ease-in-out infinite;
   }
 
+  /* Added realistic moon phase animations and effects */
+  @keyframes moonPulse {
+    0%,
+    100% {
+      box-shadow: 0 0 10px oklch(0.65 0.15 45 / 0.4), 0 0 20px oklch(0.65 0.15 45 / 0.3), 0 0 40px
+        oklch(0.65 0.15 45 / 0.2), inset 0 0 10px oklch(0.8 0.1 280 / 0.1);
+    }
+    50% {
+      box-shadow: 0 0 15px oklch(0.65 0.15 45 / 0.5), 0 0 30px oklch(0.65 0.15 45 / 0.4), 0 0 60px
+        oklch(0.65 0.15 45 / 0.3), inset 0 0 15px oklch(0.8 0.1 280 / 0.15);
+    }
+  }
+
+  /* Enhanced moon phase card styling with gradient borders */
   .moon-phase-card {
     background: linear-gradient(135deg, oklch(0.12 0.02 200), oklch(0.08 0.02 220));
-    border: 1px solid oklch(0.25 0.02 240);
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    position: relative;
     transition: all 0.3s ease;
   }
 
+  .moon-phase-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    background: linear-gradient(135deg, oklch(0.4 0.1 280 / 0.3), oklch(0.3 0.05 240 / 0.2));
+    border-radius: inherit;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: xor;
+    pointer-events: none;
+  }
+
   .moon-phase-card:hover {
-    box-shadow: 0 0 15px oklch(0.65 0.15 45 / 0.4);
+    box-shadow: 0 0 15px oklch(0.65 0.15 45 / 0.4), 0 4px 20px oklch(0.1 0 0 / 0.3);
     transform: translateY(-2px);
+  }
+
+  .moon-phase-card:hover::before {
+    background: linear-gradient(135deg, oklch(0.6 0.15 280 / 0.4), oklch(0.4 0.1 240 / 0.3));
+  }
+
+  /* Added realistic moon surface texture effects */
+  .moon-surface {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .moon-surface::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 30%, transparent 2px, oklch(0.3 0.05 280 / 0.1) 3px, transparent 4px),
+      radial-gradient(circle at 60% 70%, transparent 1px, oklch(0.2 0.03 260 / 0.08) 2px, transparent 3px),
+      radial-gradient(circle at 80% 20%, transparent 1.5px, oklch(0.25 0.04 270 / 0.06) 2.5px, transparent 3.5px);
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0.6;
   }
 }
