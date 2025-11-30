@@ -1,0 +1,78 @@
+name: Auto Update pnpm Lockfile
+
+on:
+  push:
+    branches: ["*"]
+    paths:
+      - "package.json"
+      - "package-lock.json"
+      - "pnpm-lock.yaml"
+  pull_request:
+    paths:
+      - "package.json"
+      - "package-lock.json"
+      - "pnpm-lock.yaml"
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to update pnpm-lock.yaml"
+        required: false
+        default: ""
+
+jobs:
+  update-lockfile:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || github.head_ref || github.ref_name || 'main' }}
+          fetch-depth: 0
+
+      - name: Set up Node.js and pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Sync with main and resolve conflicts
+        run: |
+          git fetch origin main
+          if ! git merge origin/main --no-edit; then
+            echo "Merge conflict detected. Resolving..."
+            
+            if git grep -q "<<<<<<<" package.json; then
+              echo "Error: Conflict in package.json. Cannot automate."
+              exit 1
+            fi
+
+            git checkout origin/main -- pnpm-lock.yaml
+            pnpm install --no-frozen-lockfile
+            pnpm update react react-dom
+            git add pnpm-lock.yaml package.json
+            git commit --no-edit -m "ci: resolve lockfile conflict with main"
+          else
+            echo "Merge successful or no conflicts."
+          fi
+
+      - name: Install dependencies and update lockfile
+        run: |
+          pnpm install --no-frozen-lockfile
+          pnpm update react react-dom
+
+      - name: Commit lockfile changes
+        run: |
+          git add pnpm-lock.yaml package.json
+          git diff --cached --quiet || git commit -m "ci: auto-update pnpm-lock.yaml and sync react versions"
+      
+      - name: Push changes
+        run: git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
